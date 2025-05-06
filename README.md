@@ -1,6 +1,9 @@
 # Ask-claude.nvim
 Ask-claude is a simple plugin integrating [claude-code](https://github.com/anthropics/claude-code) with neovim. It does this by setting up a few user commands that opens claude in a floating terminal with a prepared prompt that containts context of which file and line the user is currently looking at.
 
+## Requirements
+[claude-code](https://github.com/anthropics/claude-code) installed and available in PATH.
+
 ## Commands
 `:AskClaude` Opens claude in a floatint terminal without any prompt
 
