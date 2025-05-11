@@ -1,5 +1,6 @@
 local state = {
 	win = -1,
+	buf = -1,
 }
 
 local function table_to_string(var)
@@ -26,43 +27,58 @@ end
 
 local M = {}
 
-M.ask_claude = function(prompt)
-	local width = math.floor(vim.o.columns * 0.8)
-	local height = math.floor(vim.o.lines * 0.8)
-	local col = math.floor((vim.o.columns - width) / 2)
-	local row = math.floor((vim.o.lines - height) / 2)
+M.open_claude_window = function(win, buf)
+	if not vim.api.nvim_buf_is_valid(state.buf) then
+		buf = vim.api.nvim_create_buf(false, true)
+	end
 
-	local win_config = {
-		relative = "editor",
-		width = width,
-		height = height,
-		col = col,
-		row = row,
-		style = "minimal",
-		border = "rounded",
-	}
+	if not vim.api.nvim_win_is_valid(win) then
+		local width = math.floor(vim.o.columns * 0.8)
+		local height = math.floor(vim.o.lines * 0.8)
+		local col = math.floor((vim.o.columns - width) / 2)
+		local row = math.floor((vim.o.lines - height) / 2)
 
+		local win_config = {
+			relative = "editor",
+			width = width,
+			height = height,
+			col = col,
+			row = row,
+			style = "minimal",
+			border = "rounded",
+		}
+
+		win = vim.api.nvim_open_win(buf, true, win_config)
+	end
+
+	if vim.bo[buf].buftype ~= "terminal" then
+		vim.cmd.terminal("claude")
+	end
+
+	return { win = win, buf = buf }
+end
+
+M.toggle_claude = function()
 	if not vim.api.nvim_win_is_valid(state.win) then
-		local buf = vim.api.nvim_create_buf(false, true)
-		state.win = vim.api.nvim_open_win(buf, true, win_config)
-		local prompt_str = ""
-		if prompt then
-			for k, v in pairs(prompt) do
-				prompt_str = prompt_str .. v .. "\n\r"
-			end
-			prompt_str = "'" .. prompt_str .. "'"
-		end
-		vim.fn.termopen("claude " .. prompt_str)
+		state = M.open_claude_window(state.win, state.buf)
 	else
 		vim.api.nvim_win_hide(state.win)
+		-- Refresh buffers when claude closes
+		vim.cmd("checktime")
 	end
 end
 
-M.open_claude = function()
-	M.ask_claude()
+M.ask_claude = function(prompt)
+	M.toggle_claude()
+
+	local prompt_string = ""
+	for k, v in pairs(prompt) do
+		prompt_string = prompt_string .. v .. "\n"
+	end
+	vim.fn.feedkeys(prompt_string)
 end
 
-M.ask_claude_explain = function(context)
+M.ask_claude_context = function(context)
 	local file_path = vim.fn.expand("%")
 
 	local prompt = {}
@@ -85,7 +101,6 @@ M.ask_claude_explain = function(context)
 	else
 		table.insert(prompt, "At line: " .. line1)
 	end
-	table.insert(prompt, "Explain this")
 
 	M.ask_claude(prompt)
 end
