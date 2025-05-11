@@ -5,11 +5,11 @@ Ask-claude is a simple plugin integrating [claude-code](https://github.com/anthr
 [claude-code](https://github.com/anthropics/claude-code) installed and available in PATH.
 
 ## Commands
-`:AskClaude` Opens claude in a floatint terminal without any prompt
+`:AskClaude` Opens claude in a floating terminal
 
-`:AskClaudeExplain` Asks claude to explain the current line or selection of lines
+`:AskClaudeContext` Opens claude with context of the current file and line number
 
-`:AskClaudeDiagnostics` Asks claude to explain the diagnostics found on the current line
+`:AskClaudeDiagnostics` Opens claude with the diagnostics found on the current line
 
 ## Installation
 ### Using [lazy.nvim](https://github.com/folke/lazy.nvim)
@@ -18,8 +18,9 @@ Ask-claude is a simple plugin integrating [claude-code](https://github.com/anthr
     'knickedixen/ask-claude.nvim',
     -- Example key bindings
     config = function()
-      vim.keymap.set('n', '<leader>ac', '<cmd>AskClaude<CR>')
-      vim.keymap.set('v', '<leader>ac', '<cmd>AskClaude<CR>')
+      vim.keymap.set('n', '<C-a>', '<cmd>AskClaude<CR>')
+      vim.keymap.set('v', '<C-a>', '<cmd>AskClaude<CR>')
+      vim.keymap.set('t', '<C-a>', '<cmd>AskClaude<CR>')
       vim.keymap.set('n', '<leader>ae', '<cmd>AskClaudeExplain<CR>')
       vim.keymap.set('v', '<leader>ae', '<cmd>AskClaudeExplain<CR>')
       vim.keymap.set('n', '<leader>ad', '<cmd>AskClaudeDiagnostics<CR>')
