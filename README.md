@@ -7,7 +7,7 @@ Ask-claude is a simple plugin integrating [claude-code](https://github.com/anthr
 ## Commands
 `:AskClaude` Opens claude in a floating terminal
 
-`:AskClaudeContext` Opens claude with context of the current file and line number
+`:AskClaudeContext` Opens claude with context of the current file and line number/selection of lines
 
 `:AskClaudeDiagnostics` Opens claude with the diagnostics found on the current line
 
@@ -21,8 +21,8 @@ Ask-claude is a simple plugin integrating [claude-code](https://github.com/anthr
       vim.keymap.set('n', '<C-a>', '<cmd>AskClaude<CR>')
       vim.keymap.set('v', '<C-a>', '<cmd>AskClaude<CR>')
       vim.keymap.set('t', '<C-a>', '<cmd>AskClaude<CR>')
-      vim.keymap.set('n', '<leader>ae', '<cmd>AskClaudeExplain<CR>')
-      vim.keymap.set('v', '<leader>ae', '<cmd>AskClaudeExplain<CR>')
+      vim.keymap.set('n', '<leader>ae', '<cmd>AskClaudeContext<CR>')
+      vim.keymap.set('v', '<leader>ae', '<cmd>AskClaudeContext<CR>')
       vim.keymap.set('n', '<leader>ad', '<cmd>AskClaudeDiagnostics<CR>')
       vim.keymap.set('v', '<leader>ad', '<cmd>AskClaudeDiagnostics<CR>')
     end,
